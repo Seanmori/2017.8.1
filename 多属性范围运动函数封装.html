@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript" src="js/tools/js">
+		function animate(element,options,speed) {
+			clearInterval(element.timer);
+			var start={},range={};
+			for (var attrName in options) {
+				start[attrName]=parseFloat(css(element,attrName));
+				range[attrName]=option[attrName]-start[attrName];
+			}
+			var starttime=+new Date();
+			element.timer=setInterval(function () {
+				var elapsed=Math.min(+new Date()-starttime,speed);
+				var result=start[attrName]+elapsed*range[attrName]/speed;
+				element.style[attrName]=result+(attrName==="opacity"?""+"px");
+				if (elapsed===speed) {
+					clearInterval(element.timer);
+				}
+			},1000/60)
+		}
+	</script>
+</body>
+</html>

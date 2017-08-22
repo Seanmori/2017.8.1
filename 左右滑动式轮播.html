@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<style type="text/css">
+		* {margin: 0;padding: 0;}
+		#container {
+			width: 790px;
+			height: 340px;
+			position: relative;
+			margin: 50px auto;
+			overflow: hidden;
+		}
+		ul {list-style: none; position: absolute;}
+		li {width: 790px;height: 340px; float:left; overflow: hidden;}
+		#pages {width: 100%;height: 30px;position: absolute; bottom:0; left:0; background: #000;}
+		#pages div {width: 15px;height: 15px;border-radius: 7.5px; background: #fff; float:left; margin:7.5px;}
+		#pages div.current {background: #f00;}
+		#prev, #next {width: 50px;height: 100px;background: #000;color:#fff; text-align: center; line-height: 100px; position: absolute; top:0; bottom: 0; margin:auto; cursor: pointer;}
+		#next {right: 0;}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<ul>
+			<li><img src="images/1.jpg"></li>
+			<li><img src="images/2.jpg"></li>
+			<li><img src="images/3.jpg"></li>
+			<li><img src="images/4.jpg"></li>
+			<li><img src="images/5.jpg"></li>
+			<li><img src="images/6.jpg"></li>
+			<li><img src="images/7.jpg"></li>
+			<li><img src="images/8.jpg"></li>
+		</ul>
+		<div id="pages"></div>
+		<div id="prev">&lt;</div>
+		<div id="next">&gt;</div>
+	</div>
+
+	<script type="text/javascript" src="js/tools.js"></script>
+	<script type="text/javascript">
+		var lis=$("li"),
+			len=lis.length,
+			liWidth=lis[0].offsetWidth,
+			currentIndex=0,
+			nextIndex=1,
+			timer=null,
+			points=[];
+		css($("ul")[0],"width",liWidth*len+"px");
+		function move() {
+			var _left=-nextIndex*liWidth;
+			animate($("ul")[0],{left:_left},500);
+			removeClass(points[currentIndex],"current");
+			addClass(points[nextIndex],"current");
+			currentIndex=nextIndex;
+			nextIndex++;
+			if (nextIndex>=len) {
+				nextIndex=0;
+			}
+		}
+		timer=setInterval(move,3000);
+		for (let i = 0; i < len; i++) {
+			var _div=document.createElement("div");
+			$("#pages").appendChild(_div);
+			points.push(_div);
+			if (i===0) {
+				addClass(_div,"current");
+			}
+			_div.onclick=function () {
+				if (i===currentIndex) {
+					return;
+				}
+				nextIndex=i;
+				move();
+			}
+		}
+
+		$("#container").onmouseenter=function () {
+			clearInterval(timer);
+		}
+		$("#container").onmouseleave=function () {
+			timer=setInterval(move,3000);
+		}
+		$("#prev").onclick=function () {
+			nextIndex=currentIndex-1;
+			if (nextIndex<0) {
+				nextIndex=len-1;
+			}
+			move();
+		}
+		$("#next").onclick=move;
+	</script>
+</body>
+</html>
